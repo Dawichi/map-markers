@@ -1,19 +1,47 @@
 import { StatusBar } from 'expo-status-bar'
-import React from 'react'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
-import { Map, Modal, Panel } from './components'
+import React, { useState } from 'react'
+import { Dimensions, StyleSheet, Text, View, Button } from 'react-native'
+import { Map, Modal, Panel, Input } from './components'
 
 export default function App() {
 
-	const handleLongPress = (point) => {
-		console.log(point)
-	}  
+	const [points, setPoints] = useState([])
+	const [pointTemp, setPointTemp] = useState({})
+
+	const [name, setName] = useState('')
+
+	const [visibility, setVisibility] = useState(false)
+
+	const handleLongPress = ({ nativeEvent }) => {
+		setPointTemp(nativeEvent.coordinate)
+		setVisibility(true)
+	} 
+
+	const handleChangeText = text => {
+		setName(text)
+	}
+
+	const handleSubmit = () => {
+		const newPoint = { coordinate: pointTemp, name: name }
+		setPoints(points.concat(newPoint))
+		setVisibility(false)
+		setName('')
+	}
+
+	console.log(points)
 
 	return (
 	  <View style={styles.container}>
 		<Map onLongPress={handleLongPress} />
-		<Modal />
 		<Panel />
+		<Modal visibility={visibility}>
+			<Input
+				title="Name"
+				placeholder="Name of the marker"
+				onChangeText={handleChangeText}
+			/>
+			<Button title="Accept" onPress={handleSubmit} />
+		</Modal>
 		<StatusBar style="auto" />
 	  </View>
 	);
