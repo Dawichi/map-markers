@@ -10,6 +10,9 @@ export default function App() {
 	const [name, setName] = useState('')
 	const [visibility, setVisibility] = useState(false)
 	const [visibilityFilter, setVisibilityFilter] = useState('new_point') // new_point, all_points
+	const [pointsFilter, setPointsFilter] = useState(true)
+
+	const togglePointsFilter = () => setPointsFilter(!pointsFilter)
 
 	const handleLongPress = ({ nativeEvent }) => {
 		setPointTemp(nativeEvent.coordinate)
@@ -35,21 +38,22 @@ export default function App() {
 
 	return (
 	  <View style={styles.container}>
-		<Map onLongPress={handleLongPress} />
-		<Panel onPressLeft={handleList} textLeft='List markers' />
+		<Map onLongPress={handleLongPress} points={points} pointsFilter={pointsFilter} />
+		<Panel onPressLeft={handleList} textLeft='List markers' togglePointsFilter={togglePointsFilter} />
 		<Modal visibility={visibility}>
 			{
 				visibilityFilter === 'new_point'
 				?
-				<>
+				<View style={styles.form}>
 					<Input
 						title="Name"
 						placeholder="Name of the marker"
 						onChangeText={handleChangeText}
 					/>
+					<View style={styles.br}></View>
 					<Button title="Accept" onPress={handleSubmit} />
-				</>
-				: <List points={points} />
+				</View>
+				: <List points={points} closeModal={() => setVisibility(false)} />
 			}
 		</Modal>
 		<StatusBar style="auto" />
@@ -65,5 +69,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
+  },
+  form: {
+	padding: 10,
+  },
+  br: {
+	  margin: 10,
   },
 })
