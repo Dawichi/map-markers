@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar'
 import React, { useState } from 'react'
-import { Dimensions, StyleSheet, Text, View, Button } from 'react-native'
+import { StyleSheet, View, Button } from 'react-native'
 import { Map, Modal, Panel, Input, List } from './components'
 
 export default function App() {
@@ -60,8 +60,6 @@ export default function App() {
 	  </View>
 	);
   }
-  
-const { width, height } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
 	container: {
